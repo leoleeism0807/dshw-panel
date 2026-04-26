@@ -4,7 +4,7 @@
 
 ### GitHub 仓库链接
 
-待创建远程仓库 `dshw--panel` 并发布后补充。
+https://github.com/leoleeism0807/dshw-p03
 
 ### Quarto Book 链接
 
@@ -99,33 +99,6 @@ https://leoleeism0807.github.io/dshw-p03/
 5. `第五章 结论`
 
 本书稿基于已经生成的 `output/tables/` 与 `output/figures/` 组织内容，能够作为课程作业的网页展示版本，与 Notebook 中的分析结果保持一致。
-
-## GitHub 仓库与发布说明
-
-- 建议 GitHub 仓库名称：`dshw--panel`
-- 仓库应设置为 `Public`
-- 根据 `.gitignore`，原始数据目录 `data/raw/` 不会被纳入版本控制
-- 可纳入仓库的内容包括：
-  - `data/clean/`
-  - `output/`
-  - `notebooks/`
-  - `chapters/`
-  - `docs/`
-  - `scripts/`
-
-GitHub Pages 发布完成后，README 中建议填写链接格式如下：
-
-- `https://<your-github-username>.github.io/dshw--panel/`
-
-说明：
-
-- 当前本地目录已完成 Quarto Book 配置和渲染输出准备；
-- 当前项目已经初始化为本地 git 仓库，默认分支为 `main`；
-- 若需要真正发布到 GitHub Pages，仍需在你自己的 GitHub 账户下创建 `dshw--panel` 仓库、推送代码，并在仓库设置中启用 Pages。
-- 推荐的 Pages 设置为：
-  - Source：`Deploy from a branch`
-  - Branch：`main`
-  - Folder：`/docs`
 
 ## 文件说明
 
