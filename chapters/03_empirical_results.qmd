@@ -1,0 +1,67 @@
+## 第三章 实证结果
+
+```{python}
+from pathlib import Path
+import pandas as pd
+
+def find_project_root():
+    cwd = Path.cwd().resolve()
+    for candidate in [cwd, *cwd.parents]:
+        if (candidate / "output").exists() and (candidate / "chapters").exists():
+            return candidate
+    raise FileNotFoundError("无法自动定位项目根目录，请在项目目录内渲染 Quarto Book。")
+
+
+ROOT = find_project_root()
+```
+
+### 3.1 相关性与图形证据
+
+```{python}
+from IPython.display import Image, display
+display(Image(filename=str(ROOT / "output" / "figures" / "Fig1_descriptive_trends.png")))
+display(Image(filename=str(ROOT / "output" / "figures" / "Fig2_winsorize_boxplots.png")))
+display(Image(filename=str(ROOT / "output" / "figures" / "Fig3_correlation_heatmap.png")))
+```
+
+时序图显示，国有企业在大多数年份具有更高的平均杠杆率，而非国有企业在盈利能力上普遍更高。相关矩阵则表明，`NPR` 与 `Lev` 在样本中呈显著负相关，相关系数约为 `-0.322`，这为优序融资理论提供了直观的初步支持。
+
+此外，相关矩阵还显示 `Tang` 与 `NDTS` 的相关系数较高，约为 `0.731`。这一现象在经济上是可以理解的，因为固定资产占比较高的企业往往也伴随更高的折旧规模。不过，从后续 VIF 检验结果看，这种相关性尚未高到会严重破坏回归识别，因此可以在主模型中同时保留。
+
+### 3.2 回归结果
+
+```{python}
+reg = pd.read_csv(ROOT / "output" / "tables" / "Table4_regression_results.csv")
+reg
+```
+
+基准双向固定效应模型表明，`NPR` 的估计系数显著为负，估计值约为 `-0.625`，标准误约为 `0.056`。这意味着在控制企业固定效应、年份固定效应以及核心控制变量之后，企业盈利能力每提高一个单位，杠杆率会出现显著下降。就方向而言，这一结果明显更支持优序融资理论，而不支持权衡理论所预期的正向关系。
+
+在交互固定效应近似的稳健性检验中，`NPR` 的估计系数仍约为 `-0.405`，依然显著为负。相比基准模型，系数绝对值有所缩小，说明部分时间变化的共同冲击确实会影响 `NPR-Lev` 关系的估计强度；但由于系数方向与显著性均未发生根本改变，因此可以判断基准结论并非来自遗漏宏观异质冲击的偏误。
+
+值得注意的是，在交互固定效应模型中，`M2` 增长率的系数约为 `0.0019` 且为正，这意味着在更宽松的货币环境下，企业整体杠杆率存在上升倾向。这一结果并不与基准结论冲突：宏观宽松会抬高债务融资使用水平，但盈利能力越强、越少依赖外部融资的相对关系仍然成立。
+
+产权异质性分析显示，SOE 与非 SOE 的斜率均为负，但国有企业的负向效应更强。该结果说明产权性质并不改变关系方向，但会显著影响其强度。
+
+```{python}
+display(Image(filename=str(ROOT / "output" / "figures" / "Fig4_soe_margins.png")))
+```
+
+从分组回归看，SOE 样本中 `NPR` 的估计系数约为 `-0.858`，非 SOE 样本约为 `-0.510`。两者都显著为负，但 SOE 的绝对值更大，说明国有企业在盈利改善后更倾向于压降杠杆。交互项模型进一步显示，`NPR × SOE` 的系数约为 `-0.197` 且显著为负，这意味着相对于非国有企业，国有企业的 `NPR-Lev` 斜率会进一步下降约 `0.197` 个单位。
+
+交互项边际效应图进一步说明，在相同控制变量水平下，SOE 的 `NPR-Lev` 斜率更陡，意味着当盈利能力提高时，国有企业表现出更强的降杠杆倾向。从经济机制上看，这可能与国有企业在融资渠道更稳定、资产负债表管理目标更明确以及政策环境约束更强有关。当内部现金流改善时，它们未必会进一步扩张债务，反而更可能利用盈利修复或优化资本结构。
+
+### 3.3 时变系数结果
+
+```{python}
+m4 = pd.read_csv(ROOT / "output" / "tables" / "Table5_time_varying_coefficients.csv")
+m4
+```
+
+```{python}
+display(Image(filename=str(ROOT / "output" / "figures" / "Fig5_time_varying_beta.png")))
+```
+
+时变系数模型表明，2010-2025 年期间 `NPR` 对 `Lev` 的影响始终显著为负，但其绝对值存在明显波动。以几个代表性年份为例，2010 年的系数约为 `-0.652`，2018 年约为 `-0.390`，而 2024 年进一步扩大至 `-0.969`。这说明盈利能力对杠杆率的约束作用并非一成不变，而是在不同宏观与制度阶段中呈现出较强的时间异质性。
+
+总体而言，2015-2020 年间负向关系相对减弱，可能反映出在这一阶段企业融资环境、去杠杆政策与宏观信用条件之间存在更复杂的叠加影响；而 2023-2025 年的负向效应重新增强，则说明在样本后期，企业内部资金状况与债务配置之间的替代关系更为明显。由此可见，如果只看全样本平均系数，可能会掩盖不同年份融资行为的重要变化。

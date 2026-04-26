@@ -1,0 +1,12 @@
+body {
+  line-height: 1.8;
+}
+
+.quarto-title-block .quarto-title-banner {
+  background: linear-gradient(120deg, #1f4e79, #4f81bd);
+}
+
+.table caption {
+  caption-side: top;
+  font-weight: 600;
+}

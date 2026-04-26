@@ -1,0 +1,33 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "上市公司资本结构影响因素分析"
+  author: "李泽欣（25210067，15532312611@163.com）"
+  date: today
+  date-format: "YYYY-MM-DD"
+  chapters:
+    - index.qmd
+    - chapters/01_introduction.qmd
+    - chapters/02_data_variables.qmd
+    - chapters/03_empirical_results.qmd
+    - chapters/04_robustness_checks.qmd
+    - chapters/05_conclusion.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-summary: "显示代码"
+    df-print: paged
+    fig-align: center
+    css: styles.css
+
+execute:
+  echo: true
+  warning: false
+  message: false
