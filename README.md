@@ -8,7 +8,7 @@
 
 ### Quarto Book 链接
 
-待 GitHub Pages 发布后补充。
+https://leoleeism0807.github.io/dshw-p03/
 
 ## 个人信息
 
